@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx.xsd">
+	
+	<!-- 配置连接池 -->
+	<!-- 引入外部属性文件 -->
+	<context:property-placeholder location="classpath:jdbc.properties"/>
+	<!-- 配置c3p0连接池 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driver}"/>
+		<property name="jdbcUrl" value="${jdbc.url}"/>
+		<property name="user" value="${jdbc.user}"/>
+		<property name="password" value="${jdbc.password}"/>
+	</bean>
+	
+	<!-- hibernate相关信息 -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<!-- 注入连接池 -->
+		<property name="dataSource" ref="dataSource"/>
+		<!-- 配置Hibernate的其他的属性 -->
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.connection.autocommit">false</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+		<!-- 配置Hibernate的映射文件 -->
+		<property name="mappingResources">
+			<list>
+				<value>com/whpu/onlineShoppingMall/user/entity/User.hbm.xml</value>
+				<value>com/whpu/onlineShoppingMall/category/entity/Category.hbm.xml</value>
+				<value>com/whpu/onlineShoppingMall/product/entity/Product.hbm.xml</value>
+				<value>com/whpu/onlineShoppingMall/categorysecond/entity/CategorySecond.hbm.xml</value>
+				<value>com/whpu/onlineShoppingMall/order/entity/Order.hbm.xml</value>
+				<value>com/whpu/onlineShoppingMall/order/entity/OrderItem.hbm.xml</value>
+				<value>com/whpu/onlineShoppingMall/adminuser/entity/AdminUser.hbm.xml</value>
+			</list>
+		</property>
+	</bean>
+	<!-- 事务管理 -->
+	<!-- 开启注解事务首先得有事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	<!-- 开启注解事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	
+	<!-- action相关配置 -->
+	<!-- 首页访问的action -->
+	<bean id="indexAction" class="com.whpu.onlineShoppingMall.index.action.IndexAction" scope="prototype">
+		<property name="categoryService" ref="categoryService"></property>
+		<property name="productService" ref="productService"></property>
+	</bean>
+	<!-- 用户模块的action -->
+	<bean id="userAction" class="com.whpu.onlineShoppingMall.user.action.UserAction" scope="prototype">
+		<property name="userService" ref="userService"></property>
+	</bean>
+	<!-- 验证码的action -->
+	<bean id="checkImgAction" class="com.whpu.onlineShoppingMall.user.action.CheckImgAction">
+	
+	</bean>
+	<!-- 商品模块的action -->
+	<bean id="productAction" class="com.whpu.onlineShoppingMall.product.action.ProductAction" scope="prototype">
+		<property name="productService" ref="productService"></property>
+	</bean>
+	<!-- 购物车的action -->
+	<bean id="cartAction" class="com.whpu.onlineShoppingMall.cart.action.CartAction" scope="prototype">
+		<property name="productService" ref="productService"></property>
+	</bean>
+	<!-- 订单的action -->
+	<bean id="orderAction" class="com.whpu.onlineShoppingMall.order.action.OrderAction" scope="prototype">
+		<property name="orderService" ref="orderService"></property>
+	</bean>
+	<!-- 后台的action -->
+	<bean id="adminUserAction" class="com.whpu.onlineShoppingMall.adminuser.action.AdminUserAction" scope="prototype">
+		<property name="adminUserService" ref="adminUserService"></property>
+	</bean>
+	<!-- 后台一级分类管理的action -->
+	<bean id="adminCategoryAction" class="com.whpu.onlineShoppingMall.category.adminAction.AdminCategoryAction" scope="prototype">
+		<property name="categoryService" ref="categoryService"></property>
+	</bean>
+	<!-- 配置后台二级分类管理的Action -->
+	<bean id="adminCategorySecondAction" class="com.whpu.onlineShoppingMall.categorysecond.adminAction.AdminCategorySecondAction" scope="prototype">
+		<property name="categorySecondService" ref="categorySecondService"/>
+		<property name="categoryService" ref="categoryService"/>
+	</bean>
+	<!-- 配置后台商品管理的Action -->
+	<bean id="adminProductAction" class="com.whpu.onlineShoppingMall.product.adminaction.AdminProductAction" scope="prototype">
+		<property name="productService" ref="productService"/>
+		<property name="categorySecondService" ref="categorySecondService"/>
+	</bean>
+	<!-- 配置后台订单管理的Action -->
+	<bean id="adminOrderAction" class="com.whpu.onlineShoppingMall.order.adminaction.AdminOrderAction" scope="prototype">
+		<property name="orderService" ref="orderService"/>
+	</bean>
+	<!-- 配置后台用户管理的Action -->
+	<bean id="userAdminAction" class="com.whpu.onlineShoppingMall.user.adminaction.UserAdminAction" scope="prototype">
+		<property name="userService" ref="userService"/>
+	</bean>
+	
+	<bean id="cart" class="com.whpu.onlineShoppingMall.cart.entity.Cart" scope="prototype">
+		<property name="productService" ref="productService"/>
+	</bean>
+	
+	
+	<!-- service相关配置 -->
+	<bean id="userService" class="com.whpu.onlineShoppingMall.user.service.UserService">
+		<property name="userDao" ref="userDao"></property>
+	</bean>
+	<bean id="categoryService" class="com.whpu.onlineShoppingMall.category.service.CategoryService">
+		<property name="categoryDao" ref="categoryDao"></property>
+	</bean>
+	<bean id="productService" class="com.whpu.onlineShoppingMall.product.service.ProductService">
+		<property name="productDao" ref="productDao"></property>
+	</bean>
+	<!-- 订单的service -->
+	<bean id="orderService" class="com.whpu.onlineShoppingMall.order.service.OrderService" scope="prototype">
+		<property name="orderDao" ref="orderDao"></property>
+	</bean>
+	<!-- 后台的service -->
+	<bean id="adminUserService" class="com.whpu.onlineShoppingMall.adminuser.service.AdminUserService" scope="prototype">
+		<property name="adminUserDao" ref="adminUserDao"></property>
+	</bean>
+	<!-- 二级分类的service -->
+	<bean id="categorySecondService" class="com.whpu.onlineShoppingMall.categorysecond.service.CategorySecondService">
+		<property name="categorySecondDao" ref="categorySecondDao"/>
+	</bean>
+	
+	
+	
+	<!-- Dao相关配置 -->
+	<bean id="userDao" class="com.whpu.onlineShoppingMall.user.dao.UserDao">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	<bean id="categoryDao" class="com.whpu.onlineShoppingMall.category.dao.CategoryDao">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	<bean id="productDao" class="com.whpu.onlineShoppingMall.product.dao.ProductDao">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	<bean id="orderDao" class="com.whpu.onlineShoppingMall.order.dao.OrderDao">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	<bean id="adminUserDao" class="com.whpu.onlineShoppingMall.adminuser.dao.AdminUserDao">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	<bean id="categorySecondDao" class="com.whpu.onlineShoppingMall.categorysecond.dao.CategorySecondDao">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+</beans>

@@ -1,0 +1,186 @@
+#datatable {
+	border: 1px solid #ccc;
+	border-collapse: collapse;
+	border-spacing: 0;
+	font-size: 12px;
+	display: none;
+}
+td,th {
+	border: 1px solid #ccc;
+	padding: 4px 20px;
+}
+#divLeft{
+	width:20%;
+	height:100%;
+	float: left;
+	border:1px;
+}
+#divRight{
+	width: 70%;
+	height:100%;
+	float: right;
+	border:1px;
+}
+#container{
+	min-width: 300px;
+	max-width: 95%; 
+	height: 380px; 
+	margin: 0 auto;
+}
+#divTop{
+	 min-width: 300px;
+	 max-width: 95%; 
+	 height: 220px; 
+	 margin: 0 auto ;
+}
+#tableLeft{
+	border-collapse: collapse;
+	border-spacing: 0;
+	font-size: 20px;
+	width:300px;
+	height:150px;
+	margin-left: 100px;
+	margin-top: 50px;
+	background-color: grey;
+}
+.title{
+     color: lightblue;
+     -webkit-text-stroke: 0.5px black;
+     letter-spacing: 0.2em;
+     font-size: 35px;
+     text-align: center;
+     font-family: Arial,Helvetica,sans-serif;
+}
+.box{
+  width:95%;
+}
+.box ul{
+	list-style:none;
+}
+.box ul li{
+  float: left;
+  width: 300px;
+  height: 90px;
+  position: relative;
+  transform-style: preserve-3d;　　　　　
+}
+.box li span{
+  list-style: none;
+  position: absolute;
+  width: 300px;
+  height: 90px;
+  border: 1px solid #000000;
+  transition: all .8s linear;
+  text-align: center;
+  line-height: 90px;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 28px;
+  border-radius:10px;
+  background-color: lightskyblue;
+}
+.box li span:nth-child(1){
+  transform: rotateY(0deg);
+  z-index: 2;
+}
+.box li span:nth-child(2){
+  transform: rotateY(180deg);
+  z-index: 1;
+}
+.box li:hover span:nth-child(1){
+  transform: rotateY(180deg);
+}
+.box li:hover span:nth-child(2){
+  transform: rotateY(360deg);
+}
+.spandiv{
+	height:25px
+}
+/* 轮播图 */
+#main{
+     width: 800px;
+     height: 200px;
+     padding-left:300px;
+     padding-bottom: 50px;
+     position: relative;
+ }
+ #main .scollimg{
+     width: 750px;
+     height: 195px;
+     position: relative;
+ }
+ #main .scollimg img{
+     position: absolute;
+     top: 0;
+     left: 0;
+ }
+ #main .btn{
+     width: 730px;
+     height: 30px;
+     position: absolute;
+ }
+ #main .btn>div{
+     width: 100px;
+     height: 220px;
+     background: #fff;
+     opacity: 0;
+ }
+ #main .btn:hover>div{
+     opacity: 0.35;
+ }
+ #main .btn #btnleft{
+     position: absolute;
+     bottom: 20px;
+     left:-100px;
+ }
+ #main .btn #btnright{
+     position: absolute;
+     bottom: 20px;
+     left:280px;
+ }
+ /*左右button里的三角形*/
+ .triangle{
+     margin-top: 50px;
+     width: 0;
+     height: 0;
+     border-width:70px 40px;
+     border-style: solid;
+ }
+
+ #main .btn #btnleft .triangle{
+     border-color: transparent #ccc transparent  transparent;
+ }
+ #main .btn #btnright .triangle{
+     border-color: transparent transparent transparent #ccc;
+ }
+ #main .item{
+     position: absolute;
+     width: 200px;
+     height: 16px;
+     margin-left: 70px;
+     margin-top: 5px;
+ }
+ #main .item span{
+     width: 16px;
+     height: 16px;
+     background: #ccc;
+     display: inline-block;
+     border-radius: 50%;
+ }
+ #main .item span:hover{
+     cursor: pointer;
+ }
+ .hotspan{
+ 	width: 100px;
+ }
+ .addimgclass{
+ 	opacity:0;
+ }
+ .addspanclass{
+ 	background:'#ccc';
+ }
+  .imgclass{
+ 	opacity:1;
+ }
+ .spanclass{
+ 	background:red;
+ }

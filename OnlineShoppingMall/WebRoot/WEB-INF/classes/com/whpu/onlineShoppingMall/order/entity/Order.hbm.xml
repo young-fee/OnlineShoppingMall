@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.whpu.onlineShoppingMall.order.entity.Order" table="orders">
+		<id name="oid">
+			<generator class="native" />
+		</id>
+		<!-- <id name="oid" type="java.lang.String">  
+           <column name="oid" length="16" />  
+           <generator class="com.whpu.onlineShoppingMall.utils.KeyUtils" />  
+      	 </id>   -->
+		<property name="total"/>
+		<property name="ordertime"/>
+		<property name="state"/>
+		<property name="name"/>
+		<property name="phone"/>
+		<property name="addr"/>
+		
+		<!-- 订单与用户关联配置 -->
+		<many-to-one name="user" lazy="false" class="com.whpu.onlineShoppingMall.user.entity.User" column="uid"/>
+		
+		<!-- 订单与订单项关联配置 -->
+		<set name="orderItems" lazy="false" cascade="save-update">
+			<key column="oid"/>
+			<one-to-many class="com.whpu.onlineShoppingMall.order.entity.OrderItem"/>
+		</set>
+	</class>
+</hibernate-mapping>
